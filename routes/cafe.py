@@ -1,11 +1,13 @@
 from fastapi import APIRouter
-from DB.schemas import CategoryService, MenuService
-from DB.models import Category, Menu
+from DB.schemas import CategoryService, MenuService, OrderService
+from DB.models import Category, Menu, Order, OrderDetail
+from typing import List
 
 router = APIRouter(tags=['cafe'])
 
 category_service = CategoryService()
 menu_service = MenuService()
+order_service = OrderService()
 
 # 카테고리
 @router.post("/categories")
@@ -32,3 +34,9 @@ async def delete_menu(id: str):
 @router.patch("/menus/{id}")
 async def update_menu(id: str, menu: Menu):
     menu_service.update_menu(id, menu)
+
+# 주문
+@router.post("/orders")
+async def create_order(order: Order):
+    #order_detail = [dict(order) for order in OrderDetail]
+    return order_service.create_order(order)

@@ -4,6 +4,7 @@ import os
 import io
 from dotenv import load_dotenv, find_dotenv
 from DB.schemas import MenuService
+from DB.dummy_datas import DUMMY_ANSWER_CART_DATA
 
 _= load_dotenv(find_dotenv())
 menu_service = MenuService()
@@ -11,20 +12,7 @@ menu_service = MenuService()
 router = APIRouter()
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
-DUMMY_DATA = {
-                    "isMenu": True,
-                    "isOrder": False,
-                    "isAnswer": True,
-                    "content": {
-                        "answer": "아메리카노를 추가하셨습니다.",
-                        "menus": {
-                                "id": "667cf9d8bf0cbc39cdf4ced1",
-                                "name": "아메리카노",
-                                "price": 3000,
-                                "amount": 1,
-                            }
-                    }
-                }
+
 
 @router.websocket("/conversations")
 async def conversation(websocket: WebSocket):
@@ -34,7 +22,7 @@ async def conversation(websocket: WebSocket):
             text = await websocket.receive_text()
             try:
                 # gpt 로직 추가
-                gpt_response = DUMMY_DATA
+                gpt_response = DUMMY_ANSWER_CART_DATA
 
                 if gpt_response["isAnswer"]:
                     answer = gpt_response["content"]["answer"]
